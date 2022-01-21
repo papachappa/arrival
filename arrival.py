@@ -1,9 +1,7 @@
-# Need to be installed jsonpath-ng lib - pip install jsonpath-ng
+# Need to be installed matplolib
 # file kuka_robot.log needs to be placed in the same script dir
 
-from datetime import datetime
 import re
-
 from pathlib import Path
 from datetime import datetime as dt
 
@@ -47,21 +45,31 @@ def parse_input_data():
         return state_list, target_list, datetime_list
 
 def calculate_max_difference():
+    '''
+        Calculate maximum difference between current position and expected
+        state for each robot join
+    '''
     st, tr, dt_ = parse_input_data()
+
     # sum of joints
     sum_zip_position = [[x + y for x,y in zip(l1, l2)] for l1,l2 in zip(st,tr)]
-    # print(dt_)
-    # max_position_joint = []
 
-    # # maximum difference between current and expected position
-    # max_position_joint.append(max(sum_zip_position, key=lambda x: x[0])[0])
-    # max_position_joint.append(max(sum_zip_position, key=lambda x: x[1])[1])
-    # max_position_joint.append(max(sum_zip_position, key=lambda x: x[2])[2])
-    # max_position_joint.append(max(sum_zip_position, key=lambda x: x[3])[3])
-    # max_position_joint.append(max(sum_zip_position, key=lambda x: x[4])[4])
-    # max_position_joint.append(max(sum_zip_position, key=lambda x: x[5])[5])
+    max_position_joint = []
 
-def plot():
+    # maximum difference between current and expected position
+    max_position_joint.append(max(sum_zip_position, key=lambda x: x[0])[0])
+    max_position_joint.append(max(sum_zip_position, key=lambda x: x[1])[1])
+    max_position_joint.append(max(sum_zip_position, key=lambda x: x[2])[2])
+    max_position_joint.append(max(sum_zip_position, key=lambda x: x[3])[3])
+    max_position_joint.append(max(sum_zip_position, key=lambda x: x[4])[4])
+    max_position_joint.append(max(sum_zip_position, key=lambda x: x[5])[5])
+
+    return max_position_joint
+
+def draw_charts():
+    '''
+        Creates 6 charts for each joint: X axis for time Y axis for difference statetarget 
+    '''
     st, tr, dt_ = parse_input_data()
     sum_zip_position = [[x + y for x,y in zip(l1, l2)] for l1,l2 in zip(st,tr)]
 
@@ -102,7 +110,8 @@ def plot():
     plt.show()
 
 def main():
-    plot()
-    # calculate_max_difference()
-
-main()
+    print(f"Maximum difference of each joint {calculate_max_difference()}")
+    draw_charts()
+    
+if __name__ == "__main__":
+    main()
